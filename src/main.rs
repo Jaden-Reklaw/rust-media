@@ -29,11 +29,26 @@ impl Media {
     }
 }
 
-// Implementing a method for the enum allows you to run it on books, movies, and audio
-fn print_media(media: Media) {
-    println!("{:#?}", media);
+#[derive(Debug)]
+struct Catalog {
+    media: Vec<Media>,
 }
+
+impl Catalog {
+    fn new() -> Self {
+        Catalog { media: Vec::new() }
+    }
+
+    fn add(&mut self, item: Media) {
+        self.media.push(item);
+    }
+}
+
 fn main() {
+    // How to decide when to use a struct or enum
+    // Use structs when you have some similar functions but same data also when you have a ton of fields
+    // imagine they all have description but book have read, movies play, audio listen
+    // Use enums when you have same functions but different data works better with less fields
     let book = Media::Book {
         title: "The Hobbit".to_string(),
         author: "J.R.R. Tolkien".to_string()
@@ -47,12 +62,14 @@ fn main() {
         artist: "The Beatles".to_string()
     };
 
-    // behold the power of enums
-    // print_media(book);
-    // print_media(movie);
-    // print_media(audio);
-
     println!("{}", book.description());
     println!("{}", movie.description());
     println!("{}", audio.description());
+
+    let mut catalog = Catalog::new();
+    catalog.add(book);
+    catalog.add(movie);
+    catalog.add(audio);
+
+    println!("{:?}", catalog);
 }
