@@ -5,6 +5,8 @@ enum Media {
     Book { title: String, author: String },
     Movie { title: String, director: String },
     Audio { title: String, artist: String },
+    Podcast(u32), //You can do this 
+    Placeholder, // or this
 }
 
 impl Media {
@@ -25,6 +27,8 @@ impl Media {
             Media::Book { title, author } => format!("Book: {} by {}", title, author),
             Media::Movie { title, director } => format!("Movie: {} by {}", title, director),
             Media::Audio { title, artist } => format!("Audio: {} by {}", title, artist),
+            Media::Podcast(episodes) => format!("Podcast with {} episodes", episodes),
+            Media::Placeholder => format!("Placeholder"),
         }
     }
 }
@@ -61,15 +65,21 @@ fn main() {
         title: "The Beatles".to_string(),
         artist: "The Beatles".to_string()
     };
+    let podcast = Media::Podcast(100);
+    let placeholder = Media::Placeholder;
 
     println!("{}", book.description());
     println!("{}", movie.description());
     println!("{}", audio.description());
+    println!("{}", podcast.description());
+    println!("{}", placeholder.description());
 
     let mut catalog = Catalog::new();
     catalog.add(book);
     catalog.add(movie);
     catalog.add(audio);
+    catalog.add(podcast);
+    catalog.add(placeholder);
 
-    println!("{:?}", catalog);
+    println!("{:#?}", catalog);
 }
