@@ -11,18 +11,7 @@ enum Media {
 
 impl Media {
     fn description(&self) -> String {
-        // This is how you would do it with if let
-        // if let Media::Book { title, author } = self {
-        //     format!("Book: {} by {}", title, author)
-        // } else if let Media::Movie { title, director } = self {
-        //     format!("Movie: {} by {}", title, director)
-        // } else if let Media::Audio { title, artist } = self {
-        //     format!("Audio: {} by {}", title, artist)
-        // } else {
-        //     panic!("This should never happen")
-        // }
-
-        // match is how to tell what self is
+        
         match self {
             Media::Book { title, author } => format!("Book: {} by {}", title, author),
             Media::Movie { title, director } => format!("Movie: {} by {}", title, director),
@@ -47,7 +36,6 @@ impl Catalog {
         self.items.push(item);
     }
 
-    //Option enum exercise of how to create your own
     fn get_at_index(&self, index: usize) -> Option<&Media> {
         if self.items.len() > index {
             Some(&self.items[index])
@@ -58,10 +46,7 @@ impl Catalog {
 }
 
 fn main() {
-    // How to decide when to use a struct or enum
-    // Use structs when you have some similar functions but same data also when you have a ton of fields
-    // imagine they all have description but book have read, movies play, audio listen
-    // Use enums when you have same functions but different data works better with less fields
+
     let book = Media::Book {
         title: "The Hobbit".to_string(),
         author: "J.R.R. Tolkien".to_string()
@@ -77,11 +62,7 @@ fn main() {
     let podcast = Media::Podcast(100);
     let placeholder = Media::Placeholder;
 
-    // println!("{}", book.description());
-    // println!("{}", movie.description());
-    // println!("{}", audio.description());
-    // println!("{}", podcast.description());
-    // println!("{}", placeholder.description());
+
 
     let mut catalog = Catalog::new();
     catalog.add(book);
@@ -90,33 +71,17 @@ fn main() {
     catalog.add(podcast);
     catalog.add(placeholder);
 
-    // println!("{:#?}", catalog);
+    //Other ways to deal with options
+    //Using unwrap not used very often
+    println!("{:#?}", catalog.get_at_index(0).unwrap().description());
+    //println!("{:#?}", catalog.get_at_index(13).unwrap().description()); //This will panic 
 
-    //When retrieving data from enums it comes as an Option
-    // println!("{:?}", catalog.media.get(0));
-    // println!("{:?}", catalog.media.get(7));
+    //Using expect good to use for enviornment variables that you expect but should crash if they are not there
+    println!("{:#?}", catalog.get_at_index(0).expect("Index out of bounds").description());
+    //println!("{:#?}", catalog.get_at_index(13).expect("Index out of bounds").description()); //This will panic
 
-    //Power of pattern matching in Rust
-    // match catalog.media.get(0) {
-    //     Some(value) => println!("{}", value.description()),
-    //     None => println!("No value found"),
-    // }
-    // match catalog.media.get(7) {
-    //     Some(value) => println!("{}", value.description()),
-    //     None => println!("No value found"),
-    // }
-
-    //Two ways to check the option type of enum
-    let item = catalog.get_at_index(0);
-    match item {
-        Some(media) => println!("{}", media.description()),
-        None => println!("No value found"),
-    }
-
-    if let Some(value) = catalog.get_at_index(7) {
-        println!("{}", value.description());
-    } else {
-        println!("No value found!!!");
-    }
+    //Using unwrap_or_else
+    println!("{:#?}", catalog.get_at_index(0).unwrap_or_else(|| &Media::Placeholder).description());
+    println!("{:#?}", catalog.get_at_index(13).unwrap_or_else(|| &Media::Placeholder).description());
 
 }
