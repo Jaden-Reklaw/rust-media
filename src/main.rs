@@ -48,22 +48,13 @@ impl Catalog {
     }
 
     //Option enum exercise of how to create your own
-    fn get_at_index(&self, index: usize) -> MightHaveAValue {
+    fn get_at_index(&self, index: usize) -> Option<&Media> {
         if self.items.len() > index {
-            // Good! We have something at that index
-            MightHaveAValue::SomeValue(&self.items[index])
+            Some(&self.items[index])
         } else {
-            // Bad! We don't have anything at that index
-            MightHaveAValue::NoValue
+            None
         } 
     }
-}
-
-//This was to help explain the concept of the option enum
-#[derive(Debug)]
-enum MightHaveAValue<'a> {
-    SomeValue(&'a Media),
-    NoValue,
 }
 
 fn main() {
@@ -118,11 +109,11 @@ fn main() {
     //Two ways to check the option type of enum
     let item = catalog.get_at_index(0);
     match item {
-        MightHaveAValue::SomeValue(media) => println!("{}", media.description()),
-        MightHaveAValue::NoValue => println!("No value found"),
+        Some(media) => println!("{}", media.description()),
+        None => println!("No value found"),
     }
 
-    if let MightHaveAValue::SomeValue(value) = catalog.get_at_index(7) {
+    if let Some(value) = catalog.get_at_index(7) {
         println!("{}", value.description());
     } else {
         println!("No value found!!!");
